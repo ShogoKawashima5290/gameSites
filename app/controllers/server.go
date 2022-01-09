@@ -2,12 +2,13 @@ package controllers
 
 import (
 	"fmt"
+	"gameSites/app/models"
+	"gameSites/config"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"text/template"
-	"todo_app/todo_app/app/models"
-	"todo_app/todo_app/config"
 )
 
 func generateHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
@@ -66,5 +67,7 @@ func StartMainServer() error {
 	http.HandleFunc("/todos/edit/", parseURL(todoEdit))
 	http.HandleFunc("/todos/update/", parseURL(todoUpdate))
 	http.HandleFunc("/todos/delete/", parseURL(todoDelete))
-	return http.ListenAndServe(":"+config.Config.Port, nil)
+
+	port := os.Getenv("PORT")
+	return http.ListenAndServe(port, nil)
 }

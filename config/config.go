@@ -1,8 +1,8 @@
 package config
 
 import (
+	"gameSites/utils"
 	"log"
-	"todo_app/todo_app/utils"
 
 	"gopkg.in/go-ini/ini.v1"
 )

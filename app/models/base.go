@@ -4,11 +4,12 @@ import (
 	"crypto/sha1"
 	"database/sql"
 	"fmt"
+	"gameSites/config"
 	"log"
-	"todo_app/todo_app/config"
+	"os"
 
 	"github.com/google/uuid"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/lib/pq"
 )
 
 var Db *sql.DB
@@ -16,13 +17,21 @@ var Db *sql.DB
 var err error
 
 const (
-	tableNameUser    = "users"
-	tableNameTodo    = "todos"
-	tableNameSession = "sessions"
+/*tableNameUser    = "users"
+tableNameTodo    = "todos"
+tableNameSession = "sessions"*/
 )
 
 func init() {
-	Db, err = sql.Open(config.Config.SQLDriver, config.Config.DbName)
+
+	url := os.Getenv("DATABASE_URL")
+	connection, _ := pq.ParseURL(url)
+	connection += "sslmode=require"
+	Db, err = sql.Open(config.Config.SQLDriver, connection)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	/*Db, err = sql.Open(config.Config.SQLDriver, config.Config.DbName)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -52,7 +61,7 @@ func init() {
 		user_id INTEGER,
 		created_at DATETIME)`, tableNameSession)
 
-	Db.Exec(cmdS)
+	Db.Exec(cmdS)*/
 }
 
 func createUUID() (uuidobj uuid.UUID) {
